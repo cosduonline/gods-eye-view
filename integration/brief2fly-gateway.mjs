@@ -76,3 +76,8 @@ server.on('upgrade',async(req,socket,head)=>{
  });upstream.on('error',()=>socket.destroy());socket.on('error',()=>upstream.destroy());
 });
 server.listen(port,'0.0.0.0',()=>console.log('Brief2fly admin gateway listening'));
+
+// Temporary outbound diagnostics: HTTP status and elapsed time only.
+for (const [name,url] of [['auth','https://auth.opensky-network.org/auth/realms/opensky-network/.well-known/openid-configuration'],['states','https://opensky-network.org/api/states/all?lamin=40&lomin=27&lamax=42&lomax=29']]) {
+  const started=Date.now(); fetch(url,{signal:AbortSignal.timeout(30000)}).then(r=>{console.log('[network-check]',name,'HTTP',r.status,'ms',Date.now()-started);r.body?.cancel()}).catch(e=>console.log('[network-check]',name,e.name,'ms',Date.now()-started));
+}
