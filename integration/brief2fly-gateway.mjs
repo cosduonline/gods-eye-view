@@ -64,6 +64,7 @@ const server=http.createServer(async(req,res)=>{
  res.setHeader('cache-control','private, no-store');
  if(req.url==='/__brief2fly/login'&&req.method==='POST')return login(req,res);
  if(!await isAdmin(getToken(req)))return html(res,401);
+ if(!['GET','HEAD','OPTIONS'].includes(req.method) && !sameOrigin(req)){res.writeHead(403).end();return}
  proxy(req,res);
 });
 server.on('upgrade',async(req,socket,head)=>{
