@@ -33,6 +33,9 @@ RUN mkdir -p node_modules/.vite && chmod 777 node_modules node_modules/.vite
 
 COPY --chown=node:node . .
 
+# Pre-build the upstream application to reduce runtime memory use.
+RUN npm run build
+
 # Bind to all interfaces, otherwise the published port hits nothing. This does
 # not widen the Host allowlist: IP addresses and localhost are accepted, other
 # names only via GEV_ALLOWED_HOSTS (see build/allowedHosts.js).

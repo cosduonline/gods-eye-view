@@ -12,7 +12,7 @@ const host = process.env.RENDER_EXTERNAL_HOSTNAME;
 if (!base || !key || !secret || secret.length < 32 || !host || !/^https:\/\//.test(base)) {
   console.error('Gateway configuration missing; refusing to serve.'); process.exit(1);
 }
-const vite = spawn(process.execPath, ['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port',String(upstreamPort),'--strictPort'], {
+const vite = spawn(process.execPath, ['node_modules/vite/bin/vite.js','preview','--config','integration/brief2fly-preview.config.mjs','--host','127.0.0.1','--port',String(upstreamPort),'--strictPort'], {
   stdio:'inherit', env:{...process.env, HOST:'127.0.0.1', PORT:String(upstreamPort), GEV_ALLOWED_HOSTS:host, GEV_KEY_SETUP_TRUSTED_PEERS:'none'}
 });
 vite.on('exit', () => process.exit(1));
