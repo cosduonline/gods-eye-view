@@ -43,8 +43,8 @@ EXPOSE 4173
 # always on the Host allowlist, and the generous start period covers Vite's
 # first-run dependency optimisation.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD ["node", "-e", "fetch('http://127.0.0.1:'+(Number.parseInt(process.env.PORT,10)||4173)+'/').then((r)=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+  CMD ["node", "-e", "fetch('http://127.0.0.1:'+(Number.parseInt(process.env.PORT,10)||4173)+'/').then((r)=>process.exit(r.status===401?0:1),()=>process.exit(1))"]
 # The launcher is `npm run dev` plus one step: it trusts the container's
 # gateway address for Provider Settings, because that is where Docker delivers
 # the host's own browser from (never 127.0.0.1). See scripts/docker-start.mjs.
-CMD ["node", "scripts/docker-start.mjs"]
+CMD ["node", "integration/brief2fly-gateway.mjs"]
